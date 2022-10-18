@@ -14,17 +14,22 @@ import java.util.NoSuchElementException;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserRepository userRepository;
-    private TodoRepository todoRepository;
+    private final UserRepository userRepository;
+    private final TodoRepository todoRepository;
 
     public UserController(UserRepository userRepository, TodoRepository todoRepository) {
         this.userRepository = userRepository;
         this.todoRepository = todoRepository;
     }
 
+    @GetMapping
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     @GetMapping("/{userId}")
     public User getUserById(@PathVariable Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException());
+        return userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
     }
 
     @PostMapping
@@ -37,7 +42,7 @@ public class UserController {
 
     @PostMapping("/{userId}/todos")
     public void addTodo(@PathVariable Long userId, @RequestBody AddTodoRequest todoRequest) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException());
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Todo todo = new Todo();
         todo.setContent(todoRequest.getContent());
         user.getTodoList().add(todo);
@@ -47,22 +52,22 @@ public class UserController {
 
     @PostMapping("/todos/{todoId}")
     public void toggleTodoCompleted(@PathVariable Long todoId) {
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new NoSuchElementException());
+        Todo todo = todoRepository.findById(todoId).orElseThrow(NoSuchElementException::new);
         todo.setCompletedStatus(!todo.getCompletedStatus());
         todoRepository.save(todo);
     }
 
     @DeleteMapping("{userId}/todos/{todoId}")
     public void deleteTodo(@PathVariable Long userId, @PathVariable Long todoId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException());
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new NoSuchElementException());
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        Todo todo = todoRepository.findById(todoId).orElseThrow(NoSuchElementException::new);
         user.getTodoList().remove(todo);
         todoRepository.delete(todo);
     }
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException());
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         userRepository.delete(user);
     }
 }
