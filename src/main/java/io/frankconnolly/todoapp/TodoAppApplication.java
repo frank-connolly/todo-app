@@ -22,20 +22,18 @@ public class TodoAppApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         User user = new User();
-        user.setId(1L);
         user.setPassword("should be hashed");
         user.setUsername("John");
 
         Todo todo = new Todo();
-        todo.setId(1L);
-        todo.setContent("Complete initial commit for todo app");
+        todo.setContent("Initial commit");
 
         user.getTodoList().add(todo);
 
-        todoRepository.save(todo);
         userRepository.save(user);
+        todoRepository.save(todo);
     }
 }

@@ -1,12 +1,15 @@
 package io.frankconnolly.todoapp.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Todo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String content;
     private Boolean isComplete = Boolean.FALSE;
@@ -36,11 +39,11 @@ public class Todo {
         this.content = content;
     }
 
-    public Boolean getComplete() {
+    public Boolean getCompletedStatus() {
         return isComplete;
     }
 
-    public void setComplete(Boolean complete) {
+    public void setCompletedStatus(Boolean complete) {
         isComplete = complete;
     }
 }
